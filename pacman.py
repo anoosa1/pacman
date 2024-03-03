@@ -102,7 +102,6 @@ class Ghost:
        ghost_rect = pygame.rect.Rect((self.center_x - 18, self.center_y - 18), (36, 36))
        return ghost_rect
 
-
    def check_collisions(self):
        # R, L, U, D
        num1 = ((HEIGHT - 50) // 32)
@@ -675,9 +674,6 @@ class Ghost:
            self.x_pos - 30
        return self.x_pos, self.y_pos, self.direction
 
-
-
-
 def draw_misc():
    score_text = font.render(f'Score: {score}', True, 'white')
    screen.blit(score_text, (10, 920))
@@ -690,7 +686,6 @@ def draw_misc():
        pygame.draw.rect(screen, 'dark gray', [70, 220, 760, 260], 0, 10)
        gameover_text = font.render('Game over! Press Start button to restart!', True, 'red')
        screen.blit(gameover_text, (100, 300))
-
    if game_won:
        pygame.draw.rect(screen, 'white', [50, 200, 800, 300], 0, 10)
        pygame.draw.rect(screen, 'dark gray', [70, 220, 760, 260], 0, 10)
@@ -711,9 +706,6 @@ def check_collisions(scor, power, power_count, eaten_ghosts):
            power_count = 0
            eaten_ghosts = [False, False, False, False]
    return scor, power, power_count, eaten_ghosts
-
-
-
 
 def draw_board():
    num1 = ((HEIGHT - 50) // 32)
@@ -747,9 +739,6 @@ def draw_board():
                pygame.draw.line(screen, 'white', (j * num2, i * num1 + (0.5 * num1)),
                                 (j * num2 + num2, i * num1 + (0.5 * num1)), 3)
 
-
-
-
 def draw_player():
    # 0-RIGHT, 1-LEFT, 2-UP, 3-DOWN
    if direction == 0:
@@ -760,9 +749,6 @@ def draw_player():
        screen.blit(pygame.transform.rotate(player_images[counter // 5], 90), (player_x, player_y))
    elif direction == 3:
        screen.blit(pygame.transform.rotate(player_images[counter // 5], 270), (player_x, player_y))
-
-
-
 
 def check_position(centerx, centery):
    turns = [False, False, False, False]
@@ -814,9 +800,6 @@ def check_position(centerx, centery):
 
    return turns
 
-
-
-
 def move_player(play_x, play_y):
    # r, l, u, d
    if direction == 0 and turns_allowed[0]:
@@ -828,9 +811,6 @@ def move_player(play_x, play_y):
    elif direction == 3 and turns_allowed[3]:
        play_y += player_speed
    return play_x, play_y
-
-
-
 
 def get_targets(blink_x, blink_y, ink_x, ink_y, pink_x, pink_y, clyd_x, clyd_y):
    if player_x < 450:
@@ -909,7 +889,6 @@ def get_targets(blink_x, blink_y, ink_x, ink_y, pink_x, pink_y, clyd_x, clyd_y):
        else:
            clyd_target = return_target
    return [blink_target, ink_target, pink_target, clyd_target]
-
 
 if  joystick_count > 0:
    joystick = pygame.joystick.Joystick(0)
@@ -1063,7 +1042,6 @@ while run:
                level = copy.deepcopy(boards)
                game_over = False
                game_won = False
-
 
    game_won = True
    for i in range(len(level)):
@@ -1288,67 +1266,6 @@ while run:
        eaten_ghost[3] = True
        score += (2 ** eaten_ghost.count(True)) * 100
 
-
-   for event in pygame.event.get():
-       if event.type == pygame.QUIT:
-           run = False
-       elif event.type == pygame.JOYAXISMOTION:
-           if event.axis == 0:  # Assuming X-axis for left/right movement
-               if event.value > 0.5:
-                   direction_command = 0  # Joystick moved to the right
-               elif event.value < -0.5:
-                   direction_command = 1  # Joystick moved to the left
-           elif event.axis == 1:  # Assuming Y-axis for up/down movement
-               if event.value > 0.5:
-                   direction_command = 3  # Joystick moved down
-               elif event.value < -0.5:
-                   direction_command = 2  # Joystick moved up
-       elif event.type == pygame.JOYBUTTONDOWN:
-           if joystick.get_button(0) and (game_over or game_won):
-               # Reset the game on space key press
-               powerup = False
-               power_counter = 0
-               lives -= 1
-               startup_counter = 0
-               player_x = 450
-               player_y = 663
-               direction = 0
-               direction_command = 0
-               blinky_x = 56
-               blinky_y = 58
-               blinky_direction = 0
-               inky_x = 440
-               inky_y = 388
-               inky_direction = 2
-               pinky_x = 440
-               pinky_y = 438
-               pinky_direction = 2
-               clyde_x = 440
-               clyde_y = 438
-               clyde_direction = 2
-               eaten_ghost = [False, False, False, False]
-               blinky_dead = False
-               inky_dead = False
-               clyde_dead = False
-               pinky_dead = False
-               score = 0
-               lives = 3
-               level = copy.deepcopy(boards)
-               game_over = False
-               game_won = False
-
-
-   if event.type == pygame.KEYUP:
-       if event.key == pygame.K_RIGHT and direction_command == 0:
-           direction_command = direction
-       if event.key == pygame.K_LEFT and direction_command == 1:
-           direction_command = direction
-       if event.key == pygame.K_UP and direction_command == 2:
-           direction_command = direction
-       if event.key == pygame.K_DOWN and direction_command == 3:
-           direction_command = direction
-
-
    if direction_command == 0 and turns_allowed[0]:
        direction = 0
    if direction_command == 1 and turns_allowed[1]:
@@ -1358,12 +1275,10 @@ while run:
    if direction_command == 3 and turns_allowed[3]:
        direction = 3
 
-
    if player_x > 900:
        player_x = -47
    elif player_x < -50:
        player_x = 897
-
 
    if blinky.in_box and blinky_dead:
        blinky_dead = False
@@ -1377,9 +1292,3 @@ while run:
 
    pygame.display.flip()
 pygame.quit()
-
-
-
-
-# sound effects, restart and winning messages
-
