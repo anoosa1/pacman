@@ -911,11 +911,6 @@ while run:
         power_counter = 0
         powerup = False
         eaten_ghost = [False, False, False, False]
-    if startup_counter < 180 and not game_over and not game_won:
-        moving = False
-        startup_counter += 1
-    else:
-        moving = True
 
     screen.fill('black')
     draw_board()
@@ -943,103 +938,107 @@ while run:
         ghost_speeds[3] = 4
 
     for event in pygame.event.get():
-       if event.type == pygame.QUIT:
-           run = False
-       elif event.type == pygame.JOYAXISMOTION:
-           if event.axis == 0:  # Assuming X-axis for left/right movement
-               if event.value > 0.5:
-                   direction_command = 0  # Joystick moved to the right
-               elif event.value < -0.5:
-                   direction_command = 1  # Joystick moved to the left
-           elif event.axis == 1:  # Assuming Y-axis for up/down movement
-               if event.value > 0.5:
-                   direction_command = 3  # Joystick moved down
-               elif event.value < -0.5:
-                   direction_command = 2  # Joystick moved up
-       # if event is a pressed keyboard key
-       elif event.type == pygame.KEYDOWN:
-           # if the key is right arrow
-           if event.key == pygame.K_RIGHT:
-               # move right
-               direction_command = 0
-           # if the key is left arrow
-           elif event.key == pygame.K_LEFT:
-               # move left
-               direction_command = 1
-           # if the key is up arrow
-           elif event.key == pygame.K_UP:
-               # move up
-               direction_command = 2
-           # if the key is left arrow
-           elif event.key == pygame.K_DOWN:
-               # move down
-               direction_command = 3
-           # if space is pressed and the game is over
-           elif event.key == pygame.K_SPACE and (game_over or game_won):
-               # Reset the game on space key press
-               powerup = False
-               power_counter = 0
-               lives -= 1
-               startup_counter = 0
-               player_x = 450
-               player_y = 663
-               direction = 0
-               direction_command = 0
-               blinky_x = 56
-               blinky_y = 58
-               blinky_direction = 0
-               inky_x = 440
-               inky_y = 388
-               inky_direction = 2
-               pinky_x = 440
-               pinky_y = 438
-               pinky_direction = 2
-               clyde_x = 440
-               clyde_y = 438
-               clyde_direction = 2
-               eaten_ghost = [False, False, False, False]
-               blinky_dead = False
-               inky_dead = False
-               clyde_dead = False
-               pinky_dead = False
-               score = 0
-               lives = 3
-               level = copy.deepcopy(boards)
-               game_over = False
-               game_won = False
-       elif event.type == pygame.JOYBUTTONDOWN:
+        if event.type == pygame.QUIT:
+            run = False
+        elif event.type == pygame.JOYAXISMOTION:
+            if event.axis == 0:  # Assuming X-axis for left/right movement
+                if event.value > 0.5:
+                    direction_command = 0  # Joystick moved to the right
+                elif event.value < -0.5:
+                    direction_command = 1  # Joystick moved to the left
+            elif event.axis == 1:  # Assuming Y-axis for up/down movement
+                if event.value > 0.5:
+                    direction_command = 3  # Joystick moved down
+                elif event.value < -0.5:
+                    direction_command = 2  # Joystick moved up
+        # if event is a pressed keyboard key
+        elif event.type == pygame.KEYDOWN:
+            # if the key is right arrow
+            if event.key == pygame.K_RIGHT:
+                # move right
+                direction_command = 0
+            # if the key is left arrow
+            elif event.key == pygame.K_LEFT:
+                # move left
+                direction_command = 1
+            # if the key is up arrow
+            elif event.key == pygame.K_UP:
+                # move up
+                direction_command = 2
+            # if the key is left arrow
+            elif event.key == pygame.K_DOWN:
+                # move down
+                direction_command = 3
+            # if space is pressed and the game is over
+            elif event.key == pygame.K_SPACE and (game_over or game_won):
+                # Reset the game on space key press
+                powerup = False
+                power_counter = 0
+                lives -= 1
+                startup_counter = 0
+                player_x = 450
+                player_y = 663
+                direction = 0
+                direction_command = 0
+                blinky_x = 56
+                blinky_y = 58
+                blinky_direction = 0
+                inky_x = 440
+                inky_y = 388
+                inky_direction = 2
+                pinky_x = 440
+                pinky_y = 438
+                pinky_direction = 2
+                clyde_x = 440
+                clyde_y = 438
+                clyde_direction = 2
+                eaten_ghost = [False, False, False, False]
+                blinky_dead = False
+                inky_dead = False
+                clyde_dead = False
+                pinky_dead = False
+                score = 0
+                lives = 3
+                level = copy.deepcopy(boards)
+                game_over = False
+                game_won = False
+            elif event.key == pygame.K_SPACE and (not moving):
+                # if the game didn't start and space is pressed then start it
+                game_start = True
+                moving = True
+        elif event.type == pygame.JOYBUTTONDOWN:
             if joystick.get_button(0) and (game_over or game_won):
-               # Reset the game on space key press
-               powerup = False
-               power_counter = 0
-               lives -= 1
-               startup_counter = 0
-               player_x = 450
-               player_y = 663
-               direction = 0
-               direction_command = 0
-               blinky_x = 56
-               blinky_y = 58
-               blinky_direction = 0
-               inky_x = 440
-               inky_y = 388
-               inky_direction = 2
-               pinky_x = 440
-               pinky_y = 438
-               pinky_direction = 2
-               clyde_x = 440
-               clyde_y = 438
-               clyde_direction = 2
-               eaten_ghost = [False, False, False, False]
-               blinky_dead = False
-               inky_dead = False
-               clyde_dead = False
-               pinky_dead = False
-               score = 0
-               lives = 3
-               level = copy.deepcopy(boards)
-               game_over = False
-               game_won = False
+                # Reset the game on space key press
+                powerup = False
+                power_counter = 0
+                lives -= 1
+                startup_counter = 0
+                player_x = 450
+                player_y = 663
+                direction = 0
+                direction_command = 0
+                blinky_x = 56
+                blinky_y = 58
+                blinky_direction = 0
+                inky_x = 440
+                inky_y = 388
+                inky_direction = 2
+                pinky_x = 440
+                pinky_y = 438
+                pinky_direction = 2
+                clyde_x = 440
+                clyde_y = 438
+                clyde_direction = 2
+                eaten_ghost = [False, False, False, False]
+                blinky_dead = False
+                inky_dead = False
+                clyde_dead = False
+                pinky_dead = False
+                score = 0
+                lives = 3
+                level = copy.deepcopy(boards)
+                game_over = False
+                game_won = False
 
     game_won = True
     for i in range(len(level)):
@@ -1109,6 +1108,7 @@ while run:
                 inky_dead = False
                 clyde_dead = False
                 pinky_dead = False
+                moving = False
             else:
                 game_over = True
                 moving = False
@@ -1145,6 +1145,7 @@ while run:
             inky_dead = False
             clyde_dead = False
             pinky_dead = False
+            moving = False
         else:
             game_over = True
             moving = False
@@ -1178,6 +1179,7 @@ while run:
             inky_dead = False
             clyde_dead = False
             pinky_dead = False
+            moving = False
         else:
             game_over = True
             moving = False
@@ -1211,6 +1213,7 @@ while run:
             inky_dead = False
             clyde_dead = False
             pinky_dead = False
+            moving = False
         else:
             game_over = True
             moving = False
@@ -1242,6 +1245,7 @@ while run:
             inky_dead = False
             clyde_dead = False
             pinky_dead = False
+            moving = False
         else:
             game_over = True
             moving = False
