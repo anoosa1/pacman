@@ -1008,7 +1008,7 @@ while run:
                 moving = True
         elif event.type == pygame.JOYBUTTONDOWN:
             if joystick.get_button(0) and (game_over or game_won):
-                # Reset the game on space key press
+                # Reset the game on button key press
                 powerup = False
                 power_counter = 0
                 lives -= 1
@@ -1039,6 +1039,10 @@ while run:
                 level = copy.deepcopy(boards)
                 game_over = False
                 game_won = False
+            elif joystick.get_button(0) and (not moving):
+                # if the game didn't start and button is pressed then start it
+                game_start = True
+                moving = True
 
     game_won = True
     for i in range(len(level)):
