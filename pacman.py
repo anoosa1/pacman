@@ -997,7 +997,10 @@ while run:
                 inky_dead = False
                 clyde_dead = False
                 pinky_dead = False
-                score = 0
+                if game_over:
+                    score = 0
+                elif game_won:
+                    score += 100
                 lives = 3
                 level = copy.deepcopy(boards)
                 game_over = False
@@ -1034,7 +1037,10 @@ while run:
                 inky_dead = False
                 clyde_dead = False
                 pinky_dead = False
-                score = 0
+                if game_over:
+                    score = 0
+                elif game_won:
+                    score += 100
                 lives = 3
                 level = copy.deepcopy(boards)
                 game_over = False
@@ -1049,6 +1055,9 @@ while run:
         if 1 in level[i] or 2 in level[i]:
             game_won = False
 
+    if game_won:
+        moving = False
+
     player_circle = pygame.draw.circle(screen, 'black', (center_x, center_y), 20, 2)
     draw_player()
     blinky = Ghost(blinky_x, blinky_y, targets[0], ghost_speeds[0], blinky_img, blinky_direction, blinky_dead,
@@ -1061,7 +1070,6 @@ while run:
                     clyde_box, 3)
     draw_misc()
     targets = get_targets(blinky_x, blinky_y, inky_x, inky_y, pinky_x, pinky_y, clyde_x, clyde_y)
-
 
     turns_allowed = check_position(center_x, center_y)
     if moving:
@@ -1118,7 +1126,6 @@ while run:
                 moving = False
                 startup_counter = 0
 
-
     if powerup and (player_circle.colliderect(blinky.rect) and eaten_ghost[0] and not blinky.dead) or \
             (player_circle.colliderect(inky.rect) and eaten_ghost[1] and not inky.dead) or \
             (player_circle.colliderect(pinky.rect) and eaten_ghost[2] and not pinky.dead) or \
@@ -1155,7 +1162,6 @@ while run:
             moving = False
             startup_counter = 0
 
-
     if powerup and player_circle.colliderect(inky.rect) and eaten_ghost[1] and not inky.dead:
         if lives > 0:
             powerup = False
@@ -1188,7 +1194,6 @@ while run:
             game_over = True
             moving = False
             startup_counter = 0
-
 
     if powerup and player_circle.colliderect(pinky.rect) and eaten_ghost[2] and not pinky.dead:
         if lives > 0:
